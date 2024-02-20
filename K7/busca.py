@@ -2,7 +2,7 @@ def busca (lista, chave):
     for i, elemento in enumerate(lista):
         if elemento == chave:
             return i # = chave encontrada
-    return -1 # = chave n encontrada
+    return -1 # = chave n encontrada(fora do for)
     # Acima -> algorítmo da busca
     # Abaixo -> MAIN
 def main():
