@@ -1,59 +1,137 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h> // Para usar strcpy
+#include <string.h>
 
-// Defini玢o das estruturas fora da fun玢o main
-struct Data {
-    int dia;
-    int mes;
-    int ano;
-};
+// Estrutura de um n贸
+typedef struct Node {
+    char* nome;         // Ponteiro para armazenar o nome
+    struct Node* prox;  // Ponteiro para o pr贸ximo n贸
+} Node;
 
-struct Conta {
-    int num_Conta;
-    char tipo_conta;
-    char nome[80];
-    float saldo;
-    struct Data dataAbertura;
-    struct Data ultPagamento;
-};
+Node* createNode(const char* nome) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if (!newNode) {
+        printf("Erro ao alocar mem贸ria para o n贸.\n");
+        exit(1);
+    }
 
-// Fun珲es para imprimir dados
-void imprimir(struct Conta p) {
-    printf("\nN鷐ero de Conta: %d", p.num_Conta);
-    printf("\nTipo de Conta: %c", p.tipo_conta);
-    printf("\nNome Portador: %s", p.nome);
-    printf("\nSaldo: %.2f", p.saldo);
-    printf("\n--------------------\n\n");
+    newNode->nome = (char*)malloc(strlen(nome) + 1); // Alocando mem贸ria para o nome
+    if (!newNode->nome) {
+        printf("Erro ao alocar mem贸ria para o nome.\n");
+        exit(1);
+    }
+
+    strcpy(newNode->nome, nome);  // Copiando o nome
+    newNode->prox = NULL;         // Inicializando o pr贸ximo n贸 como NULL
+    return newNode;
 }
 
-void imprimirData(struct Data dt, char rotulo[20]) {
-    if (dt.mes < 10)
-        printf("\n%s: %d/0%d/%d", rotulo, dt.dia, dt.mes, dt.ano);
-    else
-        printf("\n%s: %d/%d/%d", rotulo, dt.dia, dt.mes, dt.ano);
+void insertEnd(Node** cabeca, const char* nome) {
+    Node* newNode = createNode(nome);
+    
+    if (*cabeca == NULL) {
+        // Se a lista estiver vazia, o novo n贸 aponta para si mesmo
+        *cabeca = newNode;
+        newNode->prox = newNode;
+    } else {
+        Node* temp = *cabeca;
+
+        // Encontrando o 煤ltimo n贸
+        while (temp->prox != *cabeca) {
+            temp = temp->prox;
+        }
+
+        // Inserindo o novo n贸 no final
+        temp->prox = newNode;
+        newNode->prox = *cabeca; // Aponta para o primeiro n贸
+    }
 }
 
-int main(void) {
-    struct Conta pessoa3;    
-    
-    // Inicializando a estrutura Conta
-    pessoa3.num_Conta = 1234;
-    pessoa3.tipo_conta = 'c';
-    strcpy(pessoa3.nome, "Juliano Souza");
-    pessoa3.saldo = 100.00;
-    pessoa3.dataAbertura.dia = 20;
-    pessoa3.dataAbertura.mes = 8;
-    pessoa3.dataAbertura.ano = 2024;
-    pessoa3.ultPagamento.dia = 18;
-    pessoa3.ultPagamento.mes = 2;
-    pessoa3.ultPagamento.ano = 2024;
-    
-    // Imprimindo os dados
-    imprimir(pessoa3);
-    imprimirData(pessoa3.dataAbertura, "Data de Abertura");
-    imprimirData(pessoa3.ultPagamento, "趌timo Pagamento");
-    
+void displayList(Node* head) {
+    if (head == NULL) {
+        printf("A lista est谩 vazia.\n");
+        return;
+    }
+
+    Node* temp = head;
+    do {
+        printf("%s ", temp->nome);
+        temp = temp->prox;
+    } while (temp != head);
+    printf("\n");
+}
+
+Node* busca(Node* cabeca, const char* nome){
+    if (cabeca == NULL){
+        printf("A lista est谩 vazia\n");
+        return NULL;
+    }
+    Node* temp = cabeca;
+    do {
+        if (strcmp(temp->nome, nome) == 0){
+            return temp; // Nome encontrado
+        }
+        temp = temp->prox;
+    } while (temp != cabeca);
+
+    return NULL; // Nome n茫o encontrado
+}
+
+int countNodes(Node* cabeca){
+    if (cabeca == NULL) {
+        return 0; // Lista vazia, contagem 0
+    }
+
+    int count = 0;
+    Node* temp = cabeca;
+    do {
+        count++; // Incrementa o contador
+        temp = temp->prox;
+    } while (temp != cabeca);
+
+    return count;
+}
+
+void freeList(Node** head) {
+    if (*head == NULL) return;
+
+    Node* current = *head;
+    Node* next;
+
+    do {
+        next = current->prox;
+        free(current->nome);
+        free(current);
+        current = next;
+    } while (current != *head);
+
+    *head = NULL;
+}
+
+int main() {
+    Node* cabeca = NULL; // Lista vazia
+
+    insertEnd(&cabeca, "Mariana");
+    insertEnd(&cabeca, "Leticia");
+
+    printf("Lista:\n");
+    displayList(cabeca);
+
+    // Buscar um nome na lista
+    const char* nameToSearch = "Leticia";
+    Node* foundNode = busca(cabeca, nameToSearch);
+    if (foundNode) {
+        printf("Nome '%s' encontrado.\n", nameToSearch);
+    } else {
+        printf("Nome '%s' n茫o foi encontrado.\n", nameToSearch);
+    }
+
+    // Contando o n煤mero de n贸s
+    int numerodeGente = countNodes(cabeca);
+    printf("O n煤mero de participantes 茅: %d\n", numerodeGente);
+
+    // Liberando a mem贸ria
+    freeList(&cabeca);
+
     return 0;
 }
-
