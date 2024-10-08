@@ -42,3 +42,9 @@ def imprimir_Arvore(raiz, espaco="", marcador_raiz="  "):
 # Chamando a função para imprimir a árvore
 print("\nEstrutura da árvore:")
 imprimir_Arvore(raiz)
+def em_ordem(raiz):
+    if not raiz:
+        return
+    em_ordem(raiz.esquerda)
+    print(raiz.chave)
+    em_ordem(raiz.direita)
