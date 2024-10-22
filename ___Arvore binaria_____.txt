@@ -1,0 +1,14 @@
+___Arvore binaria_____
+
+* Para saber se é arvore binária deve-se desenhar o caminho ou mandar imprimir em ordem:
+	* A ordem deve ser da esquerda para a direita
+	* Segundo o gpt:
+		Uma árvore binária é uma estrutura de dados onde 		cada nó tem no máximo dois filhos, que são 			normalmente chamados de filho esquerdo e filho 			direito. Para verificar se uma árvore é binária, 		você pode seguir algumas diretrizes:
+
+		* Estrutura do Nó: Cada nó deve ter no máximo 			dois filhos. Se um nó tiver mais de dois filhos, 		não é uma árvore binária.
+
+		* Condições dos Filhos: Em uma árvore binária de 		busca, os valores do filho esquerdo devem ser 			menores que o valor do nó pai, e os valores do 			filho direito devem ser maiores.
+
+		* Recursão: Você pode usar uma abordagem 			recursiva para percorrer a árvore e verificar se 		cada nó respeita as regras da árvore binária (ou 		árvore binária de busca, se aplicável).
+
+		* Representação: Se a árvore estiver 				representada em forma de lista ou matriz, você 			pode verificar as posições dos elementos para 			garantir que não há mais de dois filhos.
